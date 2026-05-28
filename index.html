@@ -1,0 +1,1739 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maestro Platform Hub</title>
+  <style>
+    :root {
+      --ink: #22211f;
+      --muted: #756f64;
+      --line: #e3ddd1;
+      --panel: #fffdf8;
+      --surface: #f7f3ea;
+      --dark: #1c1a17;
+      --dark-2: #2a2722;
+      --gold: #b9944e;
+      --gold-2: #ddc47f;
+      --cyan: #317f86;
+      --green: #527d48;
+      --magenta: #8f4f76;
+      --amber: #b3822c;
+      --red: #b45249;
+      --radius: 8px;
+      --shadow: 0 18px 50px rgba(91, 65, 29, 0.13);
+      font-family: Arial, "Noto Sans KR", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+    }
+
+    .top-band {
+      min-height: 280px;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(247, 243, 234, 0.92)),
+        radial-gradient(circle at 50% 18%, rgba(221, 196, 127, 0.28), transparent 38%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .top-inner {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 22px 0 30px;
+    }
+
+    .masthead {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      min-height: 44px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(185, 148, 78, 0.62);
+      background: linear-gradient(135deg, #efdfaa, #a77a2e);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #171410;
+    }
+
+    .brand-title {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .brand-title strong {
+      font-size: 15px;
+      line-height: 1.1;
+    }
+
+    .brand-title span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .ghost-btn,
+    .primary-btn,
+    .quiet-btn,
+    .danger-btn {
+      min-height: 36px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .ghost-btn {
+      color: var(--ink);
+      background: rgba(255, 253, 248, 0.76);
+      border: 1px solid rgba(185, 148, 78, 0.28);
+    }
+
+    .primary-btn {
+      color: #171410;
+      background: linear-gradient(135deg, #ead8a0, var(--gold));
+    }
+
+    .quiet-btn {
+      color: var(--ink);
+      background: #eee8dc;
+      border: 1px solid #ded4c3;
+    }
+
+    .danger-btn {
+      color: #fff;
+      background: var(--red);
+    }
+
+    .hero-copy {
+      position: relative;
+      max-width: 980px;
+      min-height: 220px;
+      margin: 0 auto;
+      padding: 54px 0 24px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      isolation: isolate;
+    }
+
+    .hero-symbol {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      width: min(520px, 80vw);
+      height: 250px;
+      transform: translateX(-50%);
+      z-index: -1;
+      opacity: 0.86;
+      pointer-events: none;
+    }
+
+    .hero-symbol::before,
+    .hero-symbol::after {
+      content: "";
+      position: absolute;
+      top: 20px;
+      width: 42px;
+      height: 245px;
+      background: linear-gradient(90deg, #815b1f, #e8d19a 38%, #ad7d2d 72%, #6d4b1c);
+      box-shadow: 0 20px 30px rgba(91, 65, 29, 0.22);
+      transform-origin: top center;
+    }
+
+    .hero-symbol::before {
+      left: 136px;
+      transform: skewX(-19deg) rotate(17deg);
+    }
+
+    .hero-symbol::after {
+      right: 136px;
+      transform: skewX(19deg) rotate(-17deg);
+    }
+
+    .hero-cap {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 190px;
+      height: 82px;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, #d9bc73, #9d702b);
+      box-shadow: inset 0 -12px 18px rgba(255, 247, 214, 0.32), 0 18px 26px rgba(91, 65, 29, 0.2);
+    }
+
+    .hero-cap::after {
+      content: "";
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: -38px;
+      height: 38px;
+      background: #f4ead3;
+      border-left: 8px solid rgba(99, 69, 24, 0.28);
+      border-right: 8px solid rgba(99, 69, 24, 0.18);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 28px;
+      padding: 5px 10px;
+      border: 1px solid rgba(185, 148, 78, 0.3);
+      background: rgba(255, 253, 248, 0.72);
+      color: #6a5429;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: 58px;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      color: #2b2925;
+      font-size: 24px;
+      font-weight: 800;
+      max-width: 700px;
+    }
+
+    .nav-band {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(247, 243, 234, 0.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+
+    .nav-tab {
+      min-height: 36px;
+      border-radius: 6px;
+      padding: 7px 12px;
+      color: #4a4439;
+      background: transparent;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .nav-tab[aria-selected="true"] {
+      color: var(--ink);
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(91, 65, 29, 0.08);
+      border: 1px solid var(--line);
+    }
+
+    main {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .section-head h2 {
+      margin: 0 0 4px;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 760px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.metrics {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid.two {
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+      align-items: start;
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .metric,
+    .panel,
+    .item-card,
+    .kanban-column,
+    .request-row,
+    .team-row {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 30px rgba(91, 65, 29, 0.08);
+    }
+
+    .metric {
+      min-height: 108px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .metric small {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 32px;
+      line-height: 1;
+      margin-top: 8px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .panel {
+      padding: 16px;
+    }
+
+    .panel h3,
+    .kanban-column h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+
+    .signal-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .signal-list li {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      min-height: 42px;
+      padding: 10px 0;
+      border-bottom: 1px solid #edf1f6;
+    }
+
+    .signal-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      background: #eee8dc;
+      color: #4b4438;
+      white-space: nowrap;
+    }
+
+    .label.cyan {
+      background: rgba(49, 127, 134, 0.13);
+      color: #1f6970;
+    }
+
+    .label.green {
+      background: rgba(82, 125, 72, 0.14);
+      color: #385f31;
+    }
+
+    .label.magenta {
+      background: rgba(143, 79, 118, 0.13);
+      color: #73385e;
+    }
+
+    .label.amber {
+      background: rgba(185, 148, 78, 0.18);
+      color: #74521b;
+    }
+
+    .label.red {
+      background: rgba(180, 82, 73, 0.13);
+      color: #88392f;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid #cfd7e4;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 10px;
+    }
+
+    .textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .filter-field {
+      width: 220px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 820px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 11px 12px;
+      border-bottom: 1px solid #e9edf4;
+      vertical-align: top;
+    }
+
+    th {
+      color: #515a6f;
+      background: #f5efe3;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .progress {
+      width: 140px;
+      height: 8px;
+      border-radius: 999px;
+      background: #e8dfcf;
+      overflow: hidden;
+      margin-top: 7px;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--green));
+    }
+
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(240px, 1fr));
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .kanban-column {
+      min-height: 420px;
+      padding: 14px;
+    }
+
+    .kanban-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .task-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .task-card {
+      border: 1px solid #e0e6ef;
+      border-radius: 7px;
+      background: #fff;
+      padding: 12px;
+    }
+
+    .task-card strong {
+      display: block;
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+
+    .task-meta {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mini-btn {
+      min-height: 28px;
+      padding: 5px 8px;
+      border-radius: 5px;
+      background: #eee8dc;
+      color: #4b4438;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .mini-btn.dark {
+      color: #fff;
+      background: var(--dark-2);
+    }
+
+    .item-card {
+      min-height: 150px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .item-card h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .item-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .item-card a {
+      color: #087a86;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .request-row,
+    .team-row {
+      padding: 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 160px 130px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .request-row + .request-row,
+    .team-row + .team-row {
+      margin-top: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .form-grid .full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      color: #485166;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(8, 11, 16, 0.58);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-panel {
+      width: min(680px, 100%);
+      max-height: calc(100vh - 36px);
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+    }
+
+    .modal-head,
+    .modal-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-head h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .modal-body {
+      padding: 16px;
+    }
+
+    .modal-foot {
+      border-top: 1px solid var(--line);
+      border-bottom: 0;
+      justify-content: flex-end;
+    }
+
+    .close-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 6px;
+      color: var(--ink);
+      background: #eef2f7;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .empty {
+      min-height: 90px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      border: 1px dashed #cfd7e4;
+      border-radius: 8px;
+      background: #fafbfd;
+      text-align: center;
+      padding: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 50;
+      min-width: 220px;
+      max-width: 360px;
+      padding: 12px 14px;
+      border-radius: 7px;
+      background: var(--dark);
+      color: #fff;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .embed-note {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border: 1px solid rgba(25, 199, 212, 0.28);
+      background: rgba(25, 199, 212, 0.08);
+      border-radius: 8px;
+      color: #21424a;
+    }
+
+    @media (max-width: 980px) {
+      .grid.metrics,
+      .grid.three {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.two {
+        grid-template-columns: 1fr;
+      }
+
+      .kanban {
+        grid-template-columns: repeat(4, minmax(260px, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .top-inner,
+      .nav-inner,
+      main {
+        width: min(100% - 22px, 1220px);
+      }
+
+      .masthead,
+      .section-head {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .hero-copy {
+        padding-top: 36px;
+      }
+
+      .grid.metrics,
+      .grid.three,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .request-row,
+      .team-row {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-field {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-band">
+      <div class="top-inner">
+        <div class="masthead">
+          <div class="brand">
+            <div class="mark">M</div>
+            <div class="brand-title">
+              <strong>Maestro Platform Hub</strong>
+              <span>AI Creative Team Workspace</span>
+            </div>
+          </div>
+          <div class="top-actions">
+            <button class="ghost-btn" type="button" data-open-modal="task">새 업무</button>
+            <button class="ghost-btn" type="button" data-open-modal="request">요청 등록</button>
+            <button class="primary-btn" type="button" data-action="export">JSON 내보내기</button>
+          </div>
+        </div>
+        <div class="hero-copy">
+          <div class="hero-symbol" aria-hidden="true"><span class="hero-cap"></span></div>
+          <span class="eyebrow">AI Creative Operating Platform</span>
+          <h1>Maestro Platform</h1>
+          <p>퍼포머를 위한 AI 기반 크리에이티브 운영 플랫폼</p>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav-band" aria-label="Maestro workspace navigation">
+      <div class="nav-inner" role="tablist">
+        <button class="nav-tab" type="button" aria-selected="true" data-view-target="home">Home</button>
+        <button class="nav-tab" type="button" aria-selected="false" data-view-target="projects">Projects</button>
+        <button class="nav-tab" type="button" aria-selected="false" data-view-target="tasks">Task Board</button>
+        <button class="nav-tab" type="button" aria-selected="false" data-view-target="meetings">Meetings</button>
+        <button class="nav-tab" type="button" aria-selected="false" data-view-target="docs">Docs</button>
+        <button class="nav-tab" type="button" aria-selected="false" data-view-target="requests">Requests</button>
+        <button class="nav-tab" type="button" aria-selected="false" data-view-target="team">Team</button>
+      </div>
+    </nav>
+
+    <main>
+      <section class="view active" id="home">
+        <div class="section-head">
+          <div>
+            <h2>오늘의 운영 상황판</h2>
+            <p>가장 먼저 봐야 하는 업무, 리스크, 리뷰 대기 항목을 요약합니다.</p>
+          </div>
+          <button class="quiet-btn" type="button" data-action="seed">샘플 데이터 복구</button>
+        </div>
+
+        <div class="grid metrics" id="metrics"></div>
+
+        <div class="grid two" style="margin-top: 14px;">
+          <div class="panel">
+            <h3>Priority Signals</h3>
+            <ul class="signal-list" id="prioritySignals"></ul>
+          </div>
+          <div class="panel">
+            <h3>Quick Links</h3>
+            <ul class="signal-list">
+              <li><span class="label cyan">Board</span><span>Task Board에서 실행 업무와 리뷰 대기를 관리합니다.</span></li>
+              <li><span class="label green">Docs</span><span>PRD, 운영 가이드, 온보딩 문서를 한곳에 모읍니다.</span></li>
+              <li><span class="label magenta">Requests</span><span>DM 대신 요청 폼으로 접수하고 처리 상태를 남깁니다.</span></li>
+              <li><span class="label amber">Meetings</span><span>결정사항과 액션아이템을 회의록에 고정합니다.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="projects">
+        <div class="section-head">
+          <div>
+            <h2>Projects</h2>
+            <p>프로젝트별 목표, 오너, 리스크, 다음 마일스톤을 확인합니다.</p>
+          </div>
+          <button class="quiet-btn" type="button" data-action="add-project">프로젝트 추가</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Due</th>
+                <th>Progress</th>
+                <th>Risk</th>
+                <th>Next Milestone</th>
+              </tr>
+            </thead>
+            <tbody id="projectRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="view" id="tasks">
+        <div class="section-head">
+          <div>
+            <h2>Task Board</h2>
+            <p>업무는 상태가 아니라 다음 행동까지 보여야 합니다.</p>
+          </div>
+          <button class="primary-btn" type="button" data-open-modal="task">새 업무</button>
+        </div>
+        <div class="toolbar">
+          <div class="filters">
+            <input class="input filter-field" id="taskSearch" type="search" placeholder="업무 검색">
+            <select class="select filter-field" id="taskOwnerFilter">
+              <option value="">전체 오너</option>
+            </select>
+            <select class="select filter-field" id="taskPriorityFilter">
+              <option value="">전체 우선순위</option>
+              <option>P0</option>
+              <option>P1</option>
+              <option>P2</option>
+              <option>P3</option>
+            </select>
+          </div>
+          <button class="quiet-btn" type="button" data-action="clear-filters">필터 초기화</button>
+        </div>
+        <div class="kanban" id="kanban"></div>
+      </section>
+
+      <section class="view" id="meetings">
+        <div class="section-head">
+          <div>
+            <h2>Meetings</h2>
+            <p>결정사항은 짧게, 액션아이템은 담당자와 기한까지 남깁니다.</p>
+          </div>
+          <button class="primary-btn" type="button" data-open-modal="meeting">회의록 추가</button>
+        </div>
+        <div class="grid three" id="meetingCards"></div>
+      </section>
+
+      <section class="view" id="docs">
+        <div class="section-head">
+          <div>
+            <h2>Docs</h2>
+            <p>팀의 공식 문서 입구입니다. 최신 문서만 노출하고 오래된 문서는 Archive로 보냅니다.</p>
+          </div>
+          <button class="quiet-btn" type="button" data-action="add-doc">문서 링크 추가</button>
+        </div>
+        <div class="grid three" id="docCards"></div>
+      </section>
+
+      <section class="view" id="requests">
+        <div class="section-head">
+          <div>
+            <h2>Requests</h2>
+            <p>플랫폼 지원, 디자인, 접근 권한, 리서치 요청을 누락 없이 받습니다.</p>
+          </div>
+          <button class="primary-btn" type="button" data-open-modal="request">요청 등록</button>
+        </div>
+        <div id="requestRows"></div>
+      </section>
+
+      <section class="view" id="team">
+        <div class="section-head">
+          <div>
+            <h2>Team</h2>
+            <p>누가 무엇을 책임지고 누가 백업하는지 빠르게 확인합니다.</p>
+          </div>
+          <button class="quiet-btn" type="button" data-action="add-member">팀원 추가</button>
+        </div>
+        <div id="teamRows"></div>
+        <div class="embed-note">
+          Google Sites에 넣을 때는 이 파일을 정적 호스팅한 뒤 <strong>Insert &gt; Embed &gt; By URL</strong>로 붙이는 방식이 가장 안정적입니다.
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="taskModal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
+      <div class="modal-head">
+        <h3 id="taskModalTitle">새 업무</h3>
+        <button class="close-btn" type="button" data-close-modal aria-label="닫기">x</button>
+      </div>
+      <form id="taskForm">
+        <div class="modal-body form-grid">
+          <div class="field full">
+            <label for="taskTitle">업무</label>
+            <input class="input" id="taskTitle" name="title" required>
+          </div>
+          <div class="field">
+            <label for="taskOwner">오너</label>
+            <input class="input" id="taskOwner" name="owner" required>
+          </div>
+          <div class="field">
+            <label for="taskProject">프로젝트</label>
+            <input class="input" id="taskProject" name="project" required>
+          </div>
+          <div class="field">
+            <label for="taskStatus">상태</label>
+            <select class="select" id="taskStatus" name="status">
+              <option>Backlog</option>
+              <option>Doing</option>
+              <option>Review</option>
+              <option>Blocked</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="taskPriority">우선순위</label>
+            <select class="select" id="taskPriority" name="priority">
+              <option>P1</option>
+              <option>P0</option>
+              <option>P2</option>
+              <option>P3</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="taskDue">기한</label>
+            <input class="input" id="taskDue" name="due" type="date">
+          </div>
+          <div class="field">
+            <label for="taskLink">링크</label>
+            <input class="input" id="taskLink" name="link" placeholder="https://">
+          </div>
+          <div class="field full">
+            <label for="taskNext">다음 행동</label>
+            <textarea class="textarea" id="taskNext" name="nextAction"></textarea>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="quiet-btn" type="button" data-close-modal>취소</button>
+          <button class="primary-btn" type="submit">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="requestModal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="requestModalTitle">
+      <div class="modal-head">
+        <h3 id="requestModalTitle">요청 등록</h3>
+        <button class="close-btn" type="button" data-close-modal aria-label="닫기">x</button>
+      </div>
+      <form id="requestForm">
+        <div class="modal-body form-grid">
+          <div class="field">
+            <label for="requestType">유형</label>
+            <select class="select" id="requestType" name="type">
+              <option>Platform Support</option>
+              <option>Bug / Issue</option>
+              <option>Design Request</option>
+              <option>Content Request</option>
+              <option>Access Request</option>
+              <option>Research Request</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="requestUrgency">긴급도</label>
+            <select class="select" id="requestUrgency" name="urgency">
+              <option>Normal</option>
+              <option>High</option>
+              <option>Critical</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="requestTitle">요청 제목</label>
+            <input class="input" id="requestTitle" name="title" required>
+          </div>
+          <div class="field">
+            <label for="requester">요청자</label>
+            <input class="input" id="requester" name="requester" required>
+          </div>
+          <div class="field">
+            <label for="requestDue">희망 완료일</label>
+            <input class="input" id="requestDue" name="due" type="date">
+          </div>
+          <div class="field full">
+            <label for="requestDetail">상세 내용</label>
+            <textarea class="textarea" id="requestDetail" name="detail"></textarea>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="quiet-btn" type="button" data-close-modal>취소</button>
+          <button class="primary-btn" type="submit">등록</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="meetingModal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="meetingModalTitle">
+      <div class="modal-head">
+        <h3 id="meetingModalTitle">회의록 추가</h3>
+        <button class="close-btn" type="button" data-close-modal aria-label="닫기">x</button>
+      </div>
+      <form id="meetingForm">
+        <div class="modal-body form-grid">
+          <div class="field">
+            <label for="meetingName">회의명</label>
+            <input class="input" id="meetingName" name="name" required>
+          </div>
+          <div class="field">
+            <label for="meetingDate">일자</label>
+            <input class="input" id="meetingDate" name="date" type="date" required>
+          </div>
+          <div class="field full">
+            <label for="meetingDecision">결정사항</label>
+            <textarea class="textarea" id="meetingDecision" name="decision" required></textarea>
+          </div>
+          <div class="field full">
+            <label for="meetingActions">액션아이템</label>
+            <textarea class="textarea" id="meetingActions" name="actions" placeholder="한 줄에 하나씩 입력"></textarea>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="quiet-btn" type="button" data-close-modal>취소</button>
+          <button class="primary-btn" type="submit">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = "maestro-platform-hub-v1";
+    const statuses = ["Backlog", "Doing", "Review", "Blocked"];
+
+    const seedState = {
+      projects: [
+        {
+          name: "Maestro Platform Hub",
+          owner: "SH",
+          status: "On Track",
+          priority: "P1",
+          due: "2026-06-07",
+          progress: 68,
+          risk: "Sites embed policy 확인 필요",
+          milestone: "v1 협업 허브 배포"
+        },
+        {
+          name: "AI Creative Pipeline",
+          owner: "Creative Ops",
+          status: "At Risk",
+          priority: "P0",
+          due: "2026-06-14",
+          progress: 44,
+          risk: "요청 intake 기준 미정",
+          milestone: "요청 폼과 업무보드 연결"
+        },
+        {
+          name: "Knowledge Base Reset",
+          owner: "Platform",
+          status: "On Track",
+          priority: "P2",
+          due: "2026-06-21",
+          progress: 37,
+          risk: "오래된 문서 정리 필요",
+          milestone: "Docs taxonomy 확정"
+        }
+      ],
+      tasks: [
+        {
+          id: 1001,
+          title: "Google Sites v1 페이지 생성",
+          owner: "SH",
+          project: "Maestro Platform Hub",
+          status: "Doing",
+          priority: "P1",
+          due: "2026-05-30",
+          link: "",
+          nextAction: "Home, Projects, Task Board 페이지 먼저 구성"
+        },
+        {
+          id: 1002,
+          title: "요청 폼 질문 확정",
+          owner: "Creative Ops",
+          project: "AI Creative Pipeline",
+          status: "Backlog",
+          priority: "P1",
+          due: "2026-06-03",
+          link: "",
+          nextAction: "요청 유형과 긴급도 기준 합의"
+        },
+        {
+          id: 1003,
+          title: "회의록 템플릿 테스트",
+          owner: "Platform",
+          project: "Knowledge Base Reset",
+          status: "Review",
+          priority: "P2",
+          due: "2026-06-05",
+          link: "",
+          nextAction: "결정사항/액션아이템 표 확인"
+        },
+        {
+          id: 1004,
+          title: "팀별 문서 오너 지정",
+          owner: "SH",
+          project: "Knowledge Base Reset",
+          status: "Blocked",
+          priority: "P0",
+          due: "2026-05-31",
+          link: "",
+          nextAction: "문서 카테고리별 책임자 필요"
+        }
+      ],
+      meetings: [
+        {
+          name: "Maestro Hub Kickoff",
+          date: "2026-05-28",
+          decision: "Teams 대체 목표는 채팅이 아니라 운영 허브로 정의한다.",
+          actions: ["Google Sites 골격 생성", "Task Board 템플릿 연결", "Request intake 정리"]
+        },
+        {
+          name: "Weekly Platform Sync",
+          date: "2026-06-01",
+          decision: "프로젝트 상태는 On Track / At Risk / Blocked / Shipped로 통일한다.",
+          actions: ["프로젝트별 오너 지정", "리스크 컬럼 필수화"]
+        }
+      ],
+      docs: [
+        {
+          name: "Platform Operating Guide",
+          category: "Operations",
+          owner: "Platform",
+          updated: "2026-05-28",
+          purpose: "팀 협업 규칙과 요청 처리 기준",
+          link: "#"
+        },
+        {
+          name: "AI Creative Team Charter",
+          category: "Product",
+          owner: "SH",
+          updated: "2026-05-27",
+          purpose: "팀 미션과 작업 범위",
+          link: "#"
+        },
+        {
+          name: "Meeting Notes Index",
+          category: "Archive",
+          owner: "Creative Ops",
+          updated: "2026-05-28",
+          purpose: "회의록 모음",
+          link: "#"
+        }
+      ],
+      requests: [
+        {
+          id: 501,
+          type: "Access Request",
+          urgency: "High",
+          title: "Hub 편집 권한 부여",
+          requester: "Design Lead",
+          due: "2026-05-29",
+          status: "Triaging",
+          detail: "디자인 에셋 페이지 업데이트 권한 필요"
+        },
+        {
+          id: 502,
+          type: "Platform Support",
+          urgency: "Normal",
+          title: "Task Board 상태값 검토",
+          requester: "Product",
+          due: "2026-06-02",
+          status: "Received",
+          detail: "Review와 Blocked의 운영 기준 명확화"
+        }
+      ],
+      team: [
+        {
+          name: "SH",
+          role: "Platform Owner",
+          area: "Hub / Operating System",
+          responsibility: "협업 허브 구조와 운영 규칙",
+          backup: "Platform"
+        },
+        {
+          name: "Creative Ops",
+          role: "Workflow Lead",
+          area: "Requests / Meetings",
+          responsibility: "요청 접수와 액션아이템 추적",
+          backup: "SH"
+        },
+        {
+          name: "Platform",
+          role: "Technical Owner",
+          area: "Docs / Integrations",
+          responsibility: "문서 구조와 자동화 연결",
+          backup: "Creative Ops"
+        }
+      ]
+    };
+
+    let state = loadState();
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : structuredClone(seedState);
+      } catch (error) {
+        return structuredClone(seedState);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function $(selector, root = document) {
+      return root.querySelector(selector);
+    }
+
+    function $all(selector, root = document) {
+      return [...root.querySelectorAll(selector)];
+    }
+
+    function badgeClass(value) {
+      if (["P0", "Blocked", "Critical", "At Risk"].includes(value)) return "red";
+      if (["P1", "High", "Triaging"].includes(value)) return "amber";
+      if (["Review", "Design Request"].includes(value)) return "magenta";
+      if (["Doing", "On Track", "In Progress"].includes(value)) return "cyan";
+      return "green";
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function render() {
+      renderMetrics();
+      renderSignals();
+      renderProjects();
+      renderOwnerFilter();
+      renderKanban();
+      renderMeetings();
+      renderDocs();
+      renderRequests();
+      renderTeam();
+    }
+
+    function renderMetrics() {
+      const blocked = state.tasks.filter((task) => task.status === "Blocked").length;
+      const review = state.tasks.filter((task) => task.status === "Review").length;
+      const activeProjects = state.projects.filter((project) => project.status !== "Shipped").length;
+      const openRequests = state.requests.filter((request) => request.status !== "Done").length;
+      const metrics = [
+        ["Active Projects", activeProjects, "진행 중 프로젝트"],
+        ["Blocked Tasks", blocked, "즉시 풀어야 하는 업무"],
+        ["Review Queue", review, "리뷰 대기 항목"],
+        ["Open Requests", openRequests, "처리 대기 요청"]
+      ];
+      $("#metrics").innerHTML = metrics.map(([label, value, caption]) => `
+        <div class="metric">
+          <small>${label}</small>
+          <strong>${value}</strong>
+          <span>${caption}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderSignals() {
+      const urgentTasks = state.tasks
+        .filter((task) => task.priority === "P0" || task.status === "Blocked")
+        .slice(0, 4);
+      const signals = urgentTasks.length ? urgentTasks : state.tasks.slice(0, 4);
+      $("#prioritySignals").innerHTML = signals.map((task) => `
+        <li>
+          <span class="label ${badgeClass(task.status)}">${escapeHtml(task.status)}</span>
+          <span><strong>${escapeHtml(task.title)}</strong><br>${escapeHtml(task.nextAction || "다음 행동 필요")}</span>
+        </li>
+      `).join("");
+    }
+
+    function renderProjects() {
+      $("#projectRows").innerHTML = state.projects.map((project) => `
+        <tr>
+          <td><strong>${escapeHtml(project.name)}</strong></td>
+          <td>${escapeHtml(project.owner)}</td>
+          <td><span class="label ${badgeClass(project.status)}">${escapeHtml(project.status)}</span></td>
+          <td><span class="label ${badgeClass(project.priority)}">${escapeHtml(project.priority)}</span></td>
+          <td>${escapeHtml(project.due)}</td>
+          <td>${project.progress}%<div class="progress"><span style="width:${Number(project.progress) || 0}%"></span></div></td>
+          <td>${escapeHtml(project.risk)}</td>
+          <td>${escapeHtml(project.milestone)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderOwnerFilter() {
+      const current = $("#taskOwnerFilter").value;
+      const owners = [...new Set(state.tasks.map((task) => task.owner))].sort();
+      $("#taskOwnerFilter").innerHTML = `<option value="">전체 오너</option>${owners.map((owner) => `
+        <option ${owner === current ? "selected" : ""}>${escapeHtml(owner)}</option>
+      `).join("")}`;
+    }
+
+    function getFilteredTasks() {
+      const search = $("#taskSearch").value.trim().toLowerCase();
+      const owner = $("#taskOwnerFilter").value;
+      const priority = $("#taskPriorityFilter").value;
+      return state.tasks.filter((task) => {
+        const text = `${task.title} ${task.owner} ${task.project} ${task.nextAction}`.toLowerCase();
+        return (!search || text.includes(search))
+          && (!owner || task.owner === owner)
+          && (!priority || task.priority === priority);
+      });
+    }
+
+    function renderKanban() {
+      const tasks = getFilteredTasks();
+      $("#kanban").innerHTML = statuses.map((status) => {
+        const columnTasks = tasks.filter((task) => task.status === status);
+        return `
+          <div class="kanban-column">
+            <div class="kanban-head">
+              <h3>${status}</h3>
+              <span class="label">${columnTasks.length}</span>
+            </div>
+            <div class="task-stack">
+              ${columnTasks.length ? columnTasks.map(renderTaskCard).join("") : `<div class="empty">표시할 업무가 없습니다.</div>`}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderTaskCard(task) {
+      const nextStatus = statuses[(statuses.indexOf(task.status) + 1) % statuses.length];
+      return `
+        <article class="task-card">
+          <strong>${escapeHtml(task.title)}</strong>
+          <div class="task-meta">
+            <span class="label ${badgeClass(task.priority)}">${escapeHtml(task.priority)}</span>
+            <span>${escapeHtml(task.owner)}</span>
+            <span>${escapeHtml(task.due || "No due date")}</span>
+          </div>
+          <p>${escapeHtml(task.nextAction || "다음 행동을 적어주세요.")}</p>
+          <div class="task-actions">
+            <button class="mini-btn dark" type="button" data-move-task="${task.id}" data-next-status="${nextStatus}">${nextStatus}</button>
+            <button class="mini-btn" type="button" data-delete-task="${task.id}">삭제</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderMeetings() {
+      $("#meetingCards").innerHTML = state.meetings.map((meeting) => `
+        <article class="item-card">
+          <span class="label cyan">${escapeHtml(meeting.date)}</span>
+          <h3>${escapeHtml(meeting.name)}</h3>
+          <p><strong>Decision</strong><br>${escapeHtml(meeting.decision)}</p>
+          <p><strong>Actions</strong><br>${meeting.actions.map(escapeHtml).join("<br>")}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderDocs() {
+      $("#docCards").innerHTML = state.docs.map((doc) => `
+        <article class="item-card">
+          <span class="label ${badgeClass(doc.category)}">${escapeHtml(doc.category)}</span>
+          <h3>${escapeHtml(doc.name)}</h3>
+          <p>${escapeHtml(doc.purpose)}</p>
+          <p>${escapeHtml(doc.owner)} · ${escapeHtml(doc.updated)}</p>
+          <a href="${escapeHtml(doc.link)}">문서 열기</a>
+        </article>
+      `).join("");
+    }
+
+    function renderRequests() {
+      $("#requestRows").innerHTML = state.requests.length ? state.requests.map((request) => `
+        <article class="request-row">
+          <div>
+            <strong>${escapeHtml(request.title)}</strong>
+            <div class="task-meta">
+              <span>${escapeHtml(request.type)}</span>
+              <span>${escapeHtml(request.requester)}</span>
+              <span>${escapeHtml(request.due || "No due date")}</span>
+            </div>
+          </div>
+          <span class="label ${badgeClass(request.urgency)}">${escapeHtml(request.urgency)}</span>
+          <button class="mini-btn dark" type="button" data-cycle-request="${request.id}">${escapeHtml(request.status)}</button>
+        </article>
+      `).join("") : `<div class="empty">등록된 요청이 없습니다.</div>`;
+    }
+
+    function renderTeam() {
+      $("#teamRows").innerHTML = state.team.map((member) => `
+        <article class="team-row">
+          <div>
+            <strong>${escapeHtml(member.name)}</strong>
+            <div class="task-meta">
+              <span>${escapeHtml(member.role)}</span>
+              <span>${escapeHtml(member.area)}</span>
+            </div>
+            <p>${escapeHtml(member.responsibility)}</p>
+          </div>
+          <span class="label green">Backup</span>
+          <strong>${escapeHtml(member.backup)}</strong>
+        </article>
+      `).join("");
+    }
+
+    function openModal(name) {
+      const modal = $(`#${name}Modal`);
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      const firstField = $("input, select, textarea", modal);
+      if (firstField) firstField.focus();
+    }
+
+    function closeModals() {
+      $all(".modal").forEach((modal) => {
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+      });
+    }
+
+    function toast(message) {
+      const node = $("#toast");
+      node.textContent = message;
+      node.classList.add("show");
+      window.setTimeout(() => node.classList.remove("show"), 2200);
+    }
+
+    function formDataToObject(form) {
+      return Object.fromEntries(new FormData(form).entries());
+    }
+
+    function nextId(collection) {
+      return collection.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0) + 1;
+    }
+
+    document.addEventListener("click", (event) => {
+      const navButton = event.target.closest("[data-view-target]");
+      if (navButton) {
+        const id = navButton.dataset.viewTarget;
+        $all(".nav-tab").forEach((tab) => tab.setAttribute("aria-selected", String(tab === navButton)));
+        $all(".view").forEach((view) => view.classList.toggle("active", view.id === id));
+      }
+
+      const opener = event.target.closest("[data-open-modal]");
+      if (opener) openModal(opener.dataset.openModal);
+
+      if (event.target.closest("[data-close-modal]") || event.target.classList.contains("modal")) {
+        closeModals();
+      }
+
+      const move = event.target.closest("[data-move-task]");
+      if (move) {
+        const task = state.tasks.find((item) => item.id === Number(move.dataset.moveTask));
+        if (task) {
+          task.status = move.dataset.nextStatus;
+          saveState();
+          render();
+          toast(`업무 상태가 ${task.status}(으)로 변경됐습니다.`);
+        }
+      }
+
+      const remove = event.target.closest("[data-delete-task]");
+      if (remove) {
+        state.tasks = state.tasks.filter((task) => task.id !== Number(remove.dataset.deleteTask));
+        saveState();
+        render();
+        toast("업무를 삭제했습니다.");
+      }
+
+      const cycleRequest = event.target.closest("[data-cycle-request]");
+      if (cycleRequest) {
+        const order = ["Received", "Triaging", "In Progress", "Waiting", "Done"];
+        const request = state.requests.find((item) => item.id === Number(cycleRequest.dataset.cycleRequest));
+        if (request) {
+          request.status = order[(order.indexOf(request.status) + 1) % order.length];
+          saveState();
+          render();
+        }
+      }
+
+      const action = event.target.closest("[data-action]");
+      if (action) handleAction(action.dataset.action);
+    });
+
+    function handleAction(action) {
+      if (action === "seed") {
+        state = structuredClone(seedState);
+        saveState();
+        render();
+        toast("샘플 데이터를 복구했습니다.");
+      }
+      if (action === "clear-filters") {
+        $("#taskSearch").value = "";
+        $("#taskOwnerFilter").value = "";
+        $("#taskPriorityFilter").value = "";
+        renderKanban();
+      }
+      if (action === "export") {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "maestro-platform-hub-data.json";
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+      if (action === "add-project") {
+        const name = prompt("프로젝트 이름");
+        if (!name) return;
+        state.projects.push({
+          name,
+          owner: prompt("오너") || "TBD",
+          status: "On Track",
+          priority: "P2",
+          due: "",
+          progress: 0,
+          risk: "TBD",
+          milestone: "다음 마일스톤 입력 필요"
+        });
+        saveState();
+        render();
+      }
+      if (action === "add-doc") {
+        const name = prompt("문서 이름");
+        if (!name) return;
+        state.docs.push({
+          name,
+          category: "Operations",
+          owner: "TBD",
+          updated: new Date().toISOString().slice(0, 10),
+          purpose: prompt("문서 목적") || "목적 입력 필요",
+          link: prompt("문서 링크") || "#"
+        });
+        saveState();
+        render();
+      }
+      if (action === "add-member") {
+        const name = prompt("팀원 이름");
+        if (!name) return;
+        state.team.push({
+          name,
+          role: prompt("역할") || "TBD",
+          area: prompt("담당 영역") || "TBD",
+          responsibility: prompt("책임") || "TBD",
+          backup: prompt("백업") || "TBD"
+        });
+        saveState();
+        render();
+      }
+    }
+
+    $("#taskForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const item = formDataToObject(event.currentTarget);
+      state.tasks.push({
+        id: nextId(state.tasks),
+        title: item.title,
+        owner: item.owner,
+        project: item.project,
+        status: item.status,
+        priority: item.priority,
+        due: item.due,
+        link: item.link,
+        nextAction: item.nextAction
+      });
+      saveState();
+      event.currentTarget.reset();
+      closeModals();
+      render();
+      toast("새 업무를 추가했습니다.");
+    });
+
+    $("#requestForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const item = formDataToObject(event.currentTarget);
+      state.requests.push({
+        id: nextId(state.requests),
+        type: item.type,
+        urgency: item.urgency,
+        title: item.title,
+        requester: item.requester,
+        due: item.due,
+        detail: item.detail,
+        status: "Received"
+      });
+      saveState();
+      event.currentTarget.reset();
+      closeModals();
+      render();
+      toast("요청을 등록했습니다.");
+    });
+
+    $("#meetingForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const item = formDataToObject(event.currentTarget);
+      state.meetings.unshift({
+        name: item.name,
+        date: item.date,
+        decision: item.decision,
+        actions: item.actions.split("\n").map((line) => line.trim()).filter(Boolean)
+      });
+      saveState();
+      event.currentTarget.reset();
+      closeModals();
+      render();
+      toast("회의록을 추가했습니다.");
+    });
+
+    ["taskSearch", "taskOwnerFilter", "taskPriorityFilter"].forEach((id) => {
+      $(`#${id}`).addEventListener("input", renderKanban);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeModals();
+    });
+
+    render();
+  </script>
+</body>
+</html>
