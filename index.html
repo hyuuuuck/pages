@@ -58,11 +58,12 @@
     }
 
     .top-band {
-      min-height: 280px;
+      min-height: 300px;
       color: var(--ink);
       background:
-        linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(247, 243, 234, 0.92)),
-        radial-gradient(circle at 50% 18%, rgba(221, 196, 127, 0.28), transparent 38%);
+        linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(247, 243, 234, 0.95)),
+        linear-gradient(115deg, rgba(185, 148, 78, 0.16), transparent 42%),
+        repeating-linear-gradient(90deg, transparent 0 118px, rgba(185, 148, 78, 0.08) 119px, transparent 120px);
       border-bottom: 1px solid var(--line);
     }
 
@@ -91,11 +92,11 @@
       width: 36px;
       height: 36px;
       border: 1px solid rgba(185, 148, 78, 0.62);
-      background: linear-gradient(135deg, #efdfaa, #a77a2e);
+      background: #1f1c18;
       display: grid;
       place-items: center;
       font-weight: 800;
-      color: #171410;
+      color: #e4cb86;
     }
 
     .brand-title {
@@ -157,71 +158,92 @@
 
     .hero-copy {
       position: relative;
-      max-width: 980px;
-      min-height: 220px;
+      max-width: 1120px;
+      min-height: 236px;
       margin: 0 auto;
-      padding: 54px 0 24px;
+      padding: 58px 0 34px;
       display: grid;
-      place-items: center;
-      text-align: center;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+      align-items: end;
+      gap: clamp(28px, 6vw, 84px);
+      text-align: left;
       isolation: isolate;
     }
 
-    .hero-symbol {
+    .hero-copy::before {
+      content: "";
       position: absolute;
-      top: 6px;
-      left: 50%;
-      width: min(520px, 80vw);
-      height: 250px;
-      transform: translateX(-50%);
+      left: 0;
+      right: 0;
+      top: 34px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(185, 148, 78, 0.72), rgba(185, 148, 78, 0.12), transparent);
       z-index: -1;
-      opacity: 0.86;
+    }
+
+    .hero-copy::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 76px;
+      width: min(500px, 48%);
+      height: 118px;
+      border-top: 1px solid rgba(185, 148, 78, 0.32);
+      border-bottom: 1px solid rgba(185, 148, 78, 0.18);
+      background:
+        linear-gradient(90deg, transparent, rgba(185, 148, 78, 0.12)),
+        repeating-linear-gradient(180deg, transparent 0 21px, rgba(34, 33, 31, 0.08) 22px, transparent 23px);
+      z-index: -1;
       pointer-events: none;
     }
 
-    .hero-symbol::before,
-    .hero-symbol::after {
-      content: "";
-      position: absolute;
-      top: 20px;
-      width: 42px;
-      height: 245px;
-      background: linear-gradient(90deg, #815b1f, #e8d19a 38%, #ad7d2d 72%, #6d4b1c);
-      box-shadow: 0 20px 30px rgba(91, 65, 29, 0.22);
-      transform-origin: top center;
+    .hero-text {
+      max-width: 720px;
     }
 
-    .hero-symbol::before {
-      left: 136px;
-      transform: skewX(-19deg) rotate(17deg);
+    .hero-visual {
+      display: grid;
+      gap: 13px;
+      padding: 10px 0 6px 26px;
+      border-left: 1px solid rgba(185, 148, 78, 0.34);
     }
 
-    .hero-symbol::after {
-      right: 136px;
-      transform: skewX(19deg) rotate(-17deg);
+    .visual-rail {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      align-items: center;
+      gap: 12px;
     }
 
-    .hero-cap {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: 190px;
-      height: 82px;
-      transform: translateX(-50%);
-      background: linear-gradient(180deg, #d9bc73, #9d702b);
-      box-shadow: inset 0 -12px 18px rgba(255, 247, 214, 0.32), 0 18px 26px rgba(91, 65, 29, 0.2);
+    .visual-dot {
+      width: 8px;
+      height: 8px;
+      margin-left: 15px;
+      background: var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 0 7px rgba(185, 148, 78, 0.12);
     }
 
-    .hero-cap::after {
-      content: "";
-      position: absolute;
-      left: 24px;
-      right: 24px;
-      bottom: -38px;
-      height: 38px;
-      background: #f4ead3;
-      border-left: 8px solid rgba(99, 69, 24, 0.28);
-      border-right: 8px solid rgba(99, 69, 24, 0.18);
+    .visual-line {
+      display: block;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(34, 33, 31, 0.72), rgba(185, 148, 78, 0.74));
+    }
+
+    .visual-rail:nth-child(2) .visual-line {
+      width: 74%;
+      background: linear-gradient(90deg, rgba(49, 127, 134, 0.78), rgba(185, 148, 78, 0.62));
+    }
+
+    .visual-rail:nth-child(3) .visual-line {
+      width: 88%;
+      background: linear-gradient(90deg, rgba(82, 125, 72, 0.76), rgba(185, 148, 78, 0.62));
+    }
+
+    .visual-rail:nth-child(4) .visual-line {
+      width: 62%;
+      background: linear-gradient(90deg, rgba(143, 79, 118, 0.72), rgba(185, 148, 78, 0.58));
     }
 
     .eyebrow {
@@ -248,8 +270,8 @@
     .hero-copy p {
       margin: 0;
       color: #2b2925;
-      font-size: 24px;
-      font-weight: 800;
+      font-size: 22px;
+      font-weight: 700;
       max-width: 700px;
     }
 
@@ -802,6 +824,13 @@
 
       .hero-copy {
         padding-top: 36px;
+        grid-template-columns: 1fr;
+        min-height: 0;
+      }
+
+      .hero-copy::after,
+      .hero-visual {
+        display: none;
       }
 
       .grid.metrics,
@@ -840,10 +869,17 @@
           </div>
         </div>
         <div class="hero-copy">
-          <div class="hero-symbol" aria-hidden="true"><span class="hero-cap"></span></div>
-          <span class="eyebrow">AI Creative Operating Platform</span>
-          <h1>Maestro Platform</h1>
-          <p>퍼포머를 위한 AI 기반 크리에이티브 운영 플랫폼</p>
+          <div class="hero-text">
+            <span class="eyebrow">AI Creative Operating Platform</span>
+            <h1>Maestro Platform</h1>
+            <p>퍼포머를 위한 AI 기반 크리에이티브 운영 플랫폼</p>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <span class="visual-rail"><i class="visual-dot"></i><i class="visual-line"></i></span>
+            <span class="visual-rail"><i class="visual-dot"></i><i class="visual-line"></i></span>
+            <span class="visual-rail"><i class="visual-dot"></i><i class="visual-line"></i></span>
+            <span class="visual-rail"><i class="visual-dot"></i><i class="visual-line"></i></span>
+          </div>
         </div>
       </div>
     </header>
